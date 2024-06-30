@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Medicine Inventory Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Medicine Inventory Dashboard</h2>
+        <div class="inventory-container">
+            <form class="signin-form" method="POST" action="{{ url_for('add_medicine') }}">
+                <div class="input-group">
+                    <label for="patient_name">Patient Name:</label>
+                    <input type="text" id="patient_name" name="patient_name" required>
+                </div>
+                <div class="input-group">
+                    <label for="name">Medicine Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="input-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" required>
+                </div>
+                <div class="input-group">
+                    <label for="price">Price:</label>
+                    <input type="number" step="0.01" id="price" name="price" required>
+                </div>
+                <div class="input-group">
+                    <label for="expiry_date">Expiry Date:</label>
+                    <input type="date" id="expiry_date" name="expiry_date" required>
+                </div>
+                <button type="submit">Add Medicine</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient Name</th>
+                        <th>Medicine Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicine in medicines %}
+                    <tr>
+                        <td>{{ medicine.id }}</td>
+                        <td>{{ medicine.patient_name }}</td>
+                        <td>{{ medicine.name }}</td>
+                        <td>{{ medicine.quantity }}</td>
+                        <td>${{ medicine.price }}</td>
+                        <td>{{ medicine.expiry_date }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_medicine', medicine_id=medicine.id) }}">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>
