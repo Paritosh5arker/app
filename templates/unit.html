@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Unit</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Unit Add</h2>
+        <form class="signin-form" method="post">
+            <div class="input-group">
+                <label for="id">ID:</label>
+                <input type="int" id="id" name="id" required>
+            </div>
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <button type="submit">Add Unit</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for unit in unit %}
+                <tr>
+                    <td>{{ unit.id }}</td>
+                    <td>{{ unit.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

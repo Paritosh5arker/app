@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Groceries Inventory Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('logout')}}" align="right">Logout</a>
+        <a href="{{ url_for('add_groceries') }}">Add Groceries</a>
+        <h2>Groceries Inventory Dashboard</h2>
+        <div class="inventory-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Price</th>
+                        <th>Purchase Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for groceries in groceries %}
+                    <tr>
+                        <td>{{ groceries.name }}</td>
+                        <td>{{ groceries.quantity }}</td>
+                        <td>{{ groceries.unit.name }}</td>
+                        <td>${{ groceries.price }}</td>
+                        <td>{{ groceries.purchase_date }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_groceries', groceries_id=groceries.id) }}">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+</body>
+</html>

@@ -41,9 +41,19 @@ class Patient(db.Model):
 
 class Groceries(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
+    unit = db.relationship('Unit', backref=db.backref('groceries', lazy=True))
     name = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
+    purchase_date = db.Column(db.Date, nullable=False)
+    # unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
+    # unit = db.relationship('Unit', backref=db.backref('groceries', lazy=True))
+
+class Unit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    
 
 
 @app.route('/')
@@ -67,8 +77,8 @@ def login():
 def admin():
     if 'username' in session:
         medicines = Medicine.query.all()
-        # groceries = Groceries.query.all()  # Assuming a Groceries model exists
-        return render_template('admin_dashboard.html', medicines=medicines) #(groceries=groceries) After groceries ready
+        groceries = Groceries.query.all()  # Assuming a Groceries model exists
+        return render_template('admin_dashboard.html', medicines=medicines, groceries=groceries) #After groceries ready
     return redirect(url_for('login'))
 
 @app.route('/logout')
@@ -155,6 +165,70 @@ def groceries_inventory():
     if 'username' in session:
         groceries = Groceries.query.all()  # Assuming you have a Groceries model
         return render_template('groceries_inventory.html', groceries=groceries)
+    return redirect(url_for('login'))
+
+# Try New Groceries
+@app.route('/add_groceries', methods=['GET', 'POST'])
+def add_groceries():
+    if 'username' in session:
+        if request.method == 'POST':
+            unit_id = request.form['unit_id']
+            name = request.form['name']
+            quantity = request.form['quantity']
+            price = request.form['price']
+            purchase_date = request.form['purchase_date']
+            
+                        
+            new_groceries = Groceries(
+                unit_id=unit_id,
+                name=name,
+                quantity=int(quantity),
+                price=float(price),
+                purchase_date=purchase_date,
+            )
+            db.session.add(new_groceries)
+            db.session.commit()
+            return redirect(url_for('admin'))
+        
+        
+        unit = Unit.query.all()
+        return render_template('add_groceries.html', unit=unit)
+    return redirect(url_for('login'))
+
+@app.route('/delete_groceries/<int:groceries_id>', methods=['POST'])
+def delete_groceries(groceries_id):
+    if 'username' in session:
+        groceries = Groceries.query.get(groceries_id)
+        if groceries:
+            db.session.delete(groceries)
+            db.session.commit()
+        return redirect(url_for('admin'))
+    return redirect(url_for('login'))
+
+@app.route('/unit')
+def units():
+    if 'username' in session:
+        unit = Unit.query.all()
+        return render_template('unit.html', unit=unit)
+    return redirect(url_for('login'))
+
+@app.route('/unit', methods=['GET', 'POST'])
+def add_unit():
+    if 'username' in session:
+        if request.method == 'POST':
+            id = request.form['id']
+            name = request.form['name']
+                        
+            new_unit = Unit(
+                id=id,
+                name=name,
+            )
+            db.session.add(new_unit)
+            db.session.commit()
+            return redirect(url_for('admin'))
+        
+        unit = Unit.query.all()
+        return render_template('unit.html', unit=unit)
     return redirect(url_for('login'))
 
 if __name__ == '__main__':

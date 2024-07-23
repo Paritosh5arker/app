@@ -11,58 +11,10 @@
         <h2>Admin Dashboard</h2>
 
         <!-- Buttons for Medicine and Groceries -->
-        <div class="button-container">
+        <div class="button" align="center">
             <a href="{{ url_for('medicine_inventory') }}" class="btn">Medicine</a>
             <a href="{{ url_for('groceries_inventory') }}" class="btn">Groceries</a>
         </div>
-
-        <!-- Medicine Inventory Table -->
-        <h3>Medicine Inventory</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Expiry Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for medicine in medicines %}
-                <tr>
-                    <td>{{ medicine.id }}</td>
-                    <td>{{ medicine.name }}</td>
-                    <td>{{ medicine.quantity }}</td>
-                    <td>${{ medicine.price }}</td>
-                    <td>{{ medicine.expiry_date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Groceries Inventory Table -->
-        <h3>Groceries Inventory</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for grocery in groceries %}
-                <tr>
-                    <td>{{ grocery.id }}</td>
-                    <td>{{ grocery.name }}</td>
-                    <td>{{ grocery.quantity }}</td>
-                    <td>${{ grocery.price }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
 </body>
 </html>
